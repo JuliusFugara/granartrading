@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Granara — Fine Grain & Commodity Trading</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f0e8;
+      --parchment: #ede5d0;
+      --gold: #b8922a;
+      --gold-light: #d4aa4a;
+      --gold-pale: #e8d49a;
+      --earth: #3a2e1e;
+      --earth-mid: #5c4a2f;
+      --earth-light: #8a7055;
+      --white: #fdfaf4;
+      --shadow: rgba(58,46,30,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--earth);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(245,240,232,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,146,42,0.18);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--earth);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+
+    nav ul {
+      display: flex; gap: 2.6rem; list-style: none;
+    }
+    nav ul a {
+      font-size: 0.72rem; font-weight: 400; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--earth-mid);
+      text-decoration: none; transition: color 0.3s;
+    }
+    nav ul a:hover { color: var(--gold); }
+
+    .nav-cta {
+      font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--white);
+      background: var(--gold); border: none;
+      padding: 0.65rem 1.6rem; cursor: pointer;
+      transition: background 0.3s;
+    }
+    .nav-cta:hover { background: var(--earth); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 9rem 4rem 5rem 5rem;
+      position: relative; z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.65rem; font-weight: 400; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.8rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 40px; height: 1px; background: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5.5vw, 5.2rem);
+      font-weight: 300; line-height: 1.08;
+      color: var(--earth);
+      margin-bottom: 2rem;
+    }
+    h1 em {
+      font-style: italic; color: var(--gold);
+    }
+
+    .hero-desc {
+      font-size: 0.95rem; font-weight: 300; line-height: 1.85;
+      color: var(--earth-mid); max-width: 400px;
+      margin-bottom: 3rem;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 2rem; }
+
+    .btn-primary {
+      font-size: 0.7rem; font-weight: 400; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--white);
+      background: var(--earth); border: none;
+      padding: 1rem 2.4rem; cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold); transform: translateY(-1px); }
+
+    .btn-ghost {
+      font-size: 0.7rem; font-weight: 400; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 0.6rem;
+      transition: gap 0.3s;
+    }
+    .btn-ghost:hover { gap: 1rem; }
+    .btn-ghost::after { content: '→'; }
+
+    .hero-stats {
+      margin-top: 5rem;
+      display: flex; gap: 3rem;
+    }
+    .stat-item { }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 300; color: var(--gold);
+    }
+    .stat-label {
+      font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--earth-light); margin-top: 0.2rem;
+    }
+
+    /* Hero right — decorative visual panel */
+    .hero-right {
+      position: relative; overflow: hidden;
+      background: var(--earth);
+    }
+
+    .hero-grain-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(ellipse at 30% 60%, rgba(184,146,42,0.25) 0%, transparent 65%),
+        radial-gradient(ellipse at 80% 20%, rgba(184,146,42,0.12) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    /* Decorative grain pattern */
+    .grain-pattern {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b8922a' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1'/%3E%3Ccircle cx='50' cy='10' r='1'/%3E%3Ccircle cx='10' cy='50' r='1'/%3E%3Ccircle cx='50' cy='50' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .hero-visual-content {
+      position: relative; z-index: 2;
+      height: 100%;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 4rem;
+    }
+
+    /* Large decorative number */
+    .deco-year {
+      position: absolute; top: 3rem; right: 3rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 9rem; font-weight: 300;
+      color: rgba(184,146,42,0.12);
+      line-height: 1; user-select: none;
+    }
+
+    /* Commodity circles */
+    .commodity-pills {
+      display: flex; flex-wrap: wrap; gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    .pill {
+      font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold-pale);
+      border: 1px solid rgba(184,146,42,0.35);
+      padding: 0.5rem 1.1rem;
+      backdrop-filter: blur(4px);
+      background: rgba(184,146,42,0.06);
+      animation: pillFade 0.6s ease both;
+    }
+    .pill:nth-child(1) { animation-delay: 0.1s; }
+    .pill:nth-child(2) { animation-delay: 0.2s; }
+    .pill:nth-child(3) { animation-delay: 0.3s; }
+    .pill:nth-child(4) { animation-delay: 0.4s; }
+    .pill:nth-child(5) { animation-delay: 0.5s; }
+    .pill:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes pillFade {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-style: italic;
+      color: var(--parchment); line-height: 1.5;
+      border-left: 2px solid var(--gold);
+      padding-left: 1.4rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      padding: 0 5rem;
+      margin: 4.5rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--gold); opacity: 0.25; }
+    .divider-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--gold); opacity: 0.6;
+    }
+
+    /* ── COMMODITIES SECTION ── */
+    .section { padding: 6rem 5rem; }
+    .section-label {
+      font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::before {
+      content: ''; display: block; width: 30px; height: 1px; background: var(--gold);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300;
+      line-height: 1.15; color: var(--earth);
+      max-width: 520px; margin-bottom: 1rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    .section-sub {
+      font-size: 0.9rem; font-weight: 300; line-height: 1.8;
+      color: var(--earth-light); max-width: 480px;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Commodity grid */
+    .commodity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: rgba(184,146,42,0.15);
+    }
+
+    .commodity-card {
+      background: var(--white);
+      padding: 2.4rem 2rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+    }
+    .commodity-card::before {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .commodity-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px var(--shadow); }
+    .commodity-card:hover::before { transform: scaleX(1); }
+
+    .commodity-icon {
+      font-size: 2.4rem; margin-bottom: 1.2rem;
+    }
+    .commodity-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 400;
+      color: var(--earth); margin-bottom: 0.6rem;
+    }
+    .commodity-desc {
+      font-size: 0.8rem; font-weight: 300; line-height: 1.75;
+      color: var(--earth-light);
+    }
+    .commodity-tag {
+      margin-top: 1.2rem;
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── WHY US ── */
+    .why-section {
+      padding: 6rem 5rem;
+      background: var(--earth);
+      position: relative; overflow: hidden;
+    }
+    .why-section::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,146,42,0.15) 0%, transparent 70%);
+    }
+
+    .why-section .section-label { color: var(--gold-light); }
+    .why-section .section-label::before { background: var(--gold-light); }
+    .why-section .section-title { color: var(--cream); }
+    .why-section .section-title em { color: var(--gold-light); }
+
+    .pillars {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .pillar {
+      border-top: 1px solid rgba(184,146,42,0.3);
+      padding-top: 2rem;
+    }
+    .pillar-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem; font-weight: 300;
+      color: rgba(184,146,42,0.25); line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .pillar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--cream);
+      margin-bottom: 0.8rem;
+    }
+    .pillar-text {
+      font-size: 0.8rem; font-weight: 300; line-height: 1.8;
+      color: rgba(237,229,208,0.65);
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid rgba(184,146,42,0.2);
+      border-bottom: 1px solid rgba(184,146,42,0.2);
+      background: var(--parchment);
+      padding: 1.1rem 0;
+    }
+    .marquee-track {
+      display: flex; gap: 3rem;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      display: flex; align-items: center; gap: 1.2rem;
+      font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--earth-mid); flex-shrink: 0;
+    }
+    .marquee-dot { color: var(--gold); font-size: 1rem; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 8rem 5rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      font-weight: 300; line-height: 1.12;
+      color: var(--earth);
+    }
+    .cta-title em { font-style: italic; color: var(--gold); }
+
+    .cta-right { display: flex; flex-direction: column; gap: 1.8rem; }
+    .cta-sub {
+      font-size: 0.9rem; font-weight: 300; line-height: 1.85;
+      color: var(--earth-mid);
+    }
+
+    .cta-form { display: flex; flex-direction: column; gap: 1rem; }
+    .cta-form input, .cta-form textarea {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem; font-weight: 300;
+      background: var(--white); border: 1px solid rgba(184,146,42,0.25);
+      padding: 0.85rem 1.1rem; color: var(--earth);
+      outline: none; transition: border-color 0.3s;
+      resize: none;
+    }
+    .cta-form input::placeholder, .cta-form textarea::placeholder { color: var(--earth-light); }
+    .cta-form input:focus, .cta-form textarea:focus { border-color: var(--gold); }
+    .cta-form textarea { height: 100px; }
+
+    .cta-form button {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--white); background: var(--gold);
+      border: none; padding: 1rem;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .cta-form button:hover { background: var(--earth); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--earth);
+      padding: 3rem 5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(184,146,42,0.2);
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600;
+      color: var(--cream); letter-spacing: 0.1em;
+    }
+    .footer-logo span { color: var(--gold); }
+
+    .footer-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .footer-links a {
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(237,229,208,0.5); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    .footer-copy {
+      font-size: 0.65rem; letter-spacing: 0.1em;
+      color: rgba(237,229,208,0.35);
+    }
+
+    /* ── HERO ENTRY ANIMATION ── */
+    .fade-up {
+      opacity: 0; transform: translateY(28px);
+      animation: fadeUp 0.9s ease forwards;
+    }
+    .fade-up:nth-child(1) { animation-delay: 0.1s; }
+    .fade-up:nth-child(2) { animation-delay: 0.28s; }
+    .fade-up:nth-child(3) { animation-delay: 0.44s; }
+    .fade-up:nth-child(4) { animation-delay: 0.58s; }
+    .fade-up:nth-child(5) { animation-delay: 0.7s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── WHATSAPP FLOAT ── */
+    .wa-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      display: flex; align-items: center; gap: 0.7rem;
+      background: #25D366;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.75rem 1.3rem 0.75rem 1rem;
+      border-radius: 50px;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.35);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.08em;
+      transition: transform 0.25s, box-shadow 0.25s;
+      animation: waPop 0.6s cubic-bezier(.34,1.56,.64,1) 1.2s both;
+    }
+    .wa-float:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(37,211,102,0.45);
+    }
+    .wa-float svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+    @keyframes waPop {
+      from { opacity: 0; transform: scale(0.6) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      nav ul { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 320px; }
+      .hero-left { padding: 7rem 2rem 3rem; }
+      .section, .why-section, .cta-section { padding: 4rem 2rem; }
+      .commodity-grid { grid-template-columns: 1fr 1fr; }
+      .pillars { grid-template-columns: 1fr 1fr; }
+      .cta-section { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+      .divider { padding: 0 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Gran<span>ara</span></a>
+  <ul>
+    <li><a href="#commodities">Commodities</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Enquire Now</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="fade-up hero-eyebrow">Est. 2024 &nbsp;·&nbsp; Global Commodity Trading</div>
+    <h1 class="fade-up">The World's <em>Finest</em><br>Grains, Sourced<br>with Integrity</h1>
+    <p class="fade-up hero-desc">We connect farms to markets across the globe — trading premium rice, coffee, beans, maize, potatoes, and grain commodities with transparency, reliability, and uncompromising quality.</p>
+    <div class="fade-up hero-actions">
+      <a href="#contact" class="btn-primary">Request a Quote</a>
+      <a href="#commodities" class="btn-ghost">Our Commodities</a>
+    </div>
+    <div class="fade-up hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Countries Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Commodity Classes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Quality Assured</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="grain-pattern"></div>
+    <div class="hero-grain-overlay"></div>
+    <div class="deco-year">24</div>
+    <div class="hero-visual-content">
+      <div class="commodity-pills">
+        <div class="pill">Rice</div>
+        <div class="pill">Coffee</div>
+        <div class="pill">Beans</div>
+        <div class="pill">Maize</div>
+        <div class="pill">Potatoes</div>
+        <div class="pill">Grain</div>
+      </div>
+      <p class="hero-quote">"From soil to ship — quality at every step of the journey."</p>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Premium Rice <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Arabica Coffee <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Dried Beans <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Yellow Maize <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Fresh Potatoes <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Wheat Grain <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Global Trading <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Bulk Logistics <span class="marquee-dot">✦</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Premium Rice <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Arabica Coffee <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Dried Beans <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Yellow Maize <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Fresh Potatoes <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Wheat Grain <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Global Trading <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">Bulk Logistics <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- COMMODITIES -->
+<section class="section" id="commodities">
+  <div class="section-label">What We Trade</div>
+  <h2 class="section-title">Six <em>Pillars</em> of Our Portfolio</h2>
+  <p class="section-sub">Each commodity we trade is sourced from verified, trusted producers — graded, inspected, and delivered on time.</p>
+
+  <div class="commodity-grid">
+    <div class="commodity-card">
+      <div class="commodity-icon">🌾</div>
+      <div class="commodity-name">Rice</div>
+      <p class="commodity-desc">Long-grain, short-grain, jasmine, basmati — we source across all varieties, meeting food-grade and export standards.</p>
+      <div class="commodity-tag">Bulk · Packaged · Export Grade</div>
+    </div>
+    <div class="commodity-card">
+      <div class="commodity-icon">☕</div>
+      <div class="commodity-name">Coffee</div>
+      <p class="commodity-desc">Green and roasted beans from high-altitude farms. Arabica and Robusta, cupped and certified for international buyers.</p>
+      <div class="commodity-tag">Green Bean · Roasted · Specialty</div>
+    </div>
+    <div class="commodity-card">
+      <div class="commodity-icon">🫘</div>
+      <div class="commodity-name">Beans</div>
+      <p class="commodity-desc">Black beans, kidney beans, chickpeas, and more. Sorted, dried, and packed to specification for retail and industrial use.</p>
+      <div class="commodity-tag">Dried · Sorted · Bulk</div>
+    </div>
+    <div class="commodity-card">
+      <div class="commodity-icon">🌽</div>
+      <div class="commodity-name">Maize</div>
+      <p class="commodity-desc">Yellow and white maize for milling, animal feed, and direct consumption — traded in volume with consistent moisture control.</p>
+      <div class="commodity-tag">Yellow · White · Feed Grade</div>
+    </div>
+    <div class="commodity-card">
+      <div class="commodity-icon">🥔</div>
+      <div class="commodity-name">Potatoes</div>
+      <p class="commodity-desc">Table potatoes, seed potatoes, and processing varieties. Cold-chain handled and graded to destination market standards.</p>
+      <div class="commodity-tag">Table · Seed · Processing</div>
+    </div>
+    <div class="commodity-card">
+      <div class="commodity-icon">🌿</div>
+      <div class="commodity-name">Grain & Wheat</div>
+      <p class="commodity-desc">Milling wheat, sorghum, barley, and mixed grains traded at scale — connecting local harvests to regional millers and distributors.</p>
+      <div class="commodity-tag">Milling · Sorghum · Barley</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-icon">✦</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- WHY US -->
+<section class="why-section" id="why">
+  <div class="section-label">Why Granara</div>
+  <h2 class="section-title" style="max-width:600px">Built on <em>Trust,</em> Delivered with Precision</h2>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <div class="pillar-title">Verified Sourcing</div>
+      <p class="pillar-text">We work only with vetted farmers and cooperatives, ensuring traceability from field to port.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <div class="pillar-title">Quality Control</div>
+      <p class="pillar-text">Every shipment undergoes rigorous grading, moisture testing, and third-party inspection before dispatch.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <div class="pillar-title">Flexible Volumes</div>
+      <p class="pillar-text">From small retail consignments to full bulk cargo — we scale to your purchasing needs without compromise.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">04</div>
+      <div class="pillar-title">Reliable Logistics</div>
+      <p class="pillar-text">Established freight partnerships ensure on-time delivery to ports and inland destinations across the region.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT CTA -->
+<section class="cta-section" id="contact">
+  <div>
+    <div class="section-label">Get In Touch</div>
+    <h2 class="cta-title">Ready to <em>Trade?</em><br>Let's Talk.</h2>
+  </div>
+  <div class="cta-right">
+    <p class="cta-sub">Whether you're sourcing a single container or establishing a long-term supply agreement, we're ready to discuss your requirements.</p>
+    <div class="cta-form">
+      <input type="text" placeholder="Your Name / Company" />
+      <input type="email" placeholder="Email Address" />
+      <input type="text" placeholder="Commodity of Interest (e.g. Rice, Coffee)" />
+      <textarea placeholder="Your message or quantity requirement..."></textarea>
+      <button type="button">Send Enquiry →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Gran<span>ara</span></div>
+  <ul class="footer-links">
+    <li><a href="#commodities">Commodities</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2024 Granara Trading. All rights reserved.</div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa-float" href="https://wa.me/255783633754?text=Hello%2C%20I%27m%20interested%20in%20your%20commodities." target="_blank" rel="noopener">
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.668 4.61 1.832 6.5L4 29l7.75-1.812A11.94 11.94 0 0016 28c6.627 0 12-5.373 12-12S22.627 3 16 3z" fill="#fff"/>
+    <path d="M16 5c5.523 0 10 4.477 10 10s-4.477 10-10 10c-1.8 0-3.49-.476-4.95-1.31L7 25l1.34-4.01A9.96 9.96 0 016 15c0-5.523 4.477-10 10-10z" fill="#25D366"/>
+    <path d="M12.5 10.5c-.3-.7-.6-.7-.9-.71h-.77c-.27 0-.7.1-1.07.5s-1.4 1.37-1.4 3.33 1.43 3.87 1.63 4.13c.2.27 2.76 4.4 6.8 6 .95.4 1.69.64 2.27.82.95.3 1.82.26 2.5.16.77-.12 2.36-.97 2.7-1.9.33-.93.33-1.73.23-1.9-.1-.17-.37-.27-.77-.47s-2.37-1.17-2.74-1.3c-.37-.13-.63-.2-.9.2s-1.03 1.3-1.27 1.57c-.23.27-.47.3-.87.1s-1.7-.63-3.23-2c-1.2-1.07-2-2.37-2.23-2.77-.23-.4-.03-.62.17-.82.18-.18.4-.47.6-.7.2-.23.27-.4.4-.67.13-.27.07-.5-.03-.7s-.87-2.17-1.23-2.97z" fill="#fff"/>
+  </svg>
+  Chat on WhatsApp
+</a>
+
+</body>
+</html>
